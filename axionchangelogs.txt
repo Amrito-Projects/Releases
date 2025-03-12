@@ -1,0 +1,40 @@
+# AXION 1.3 (12/04/'25)
+- Drop EUICC Changes (Cause its broken)
+- Fixed IR Sensor
+- Fixed Doze Brightness
+- Set animations to 0.8x by default
+- Allow games to use 120fps
+- Define Correct CPU variant
+Reason No.1 :
+[Klozz]
+This will allow the system to make better optimizations for performance and power efficiency
+
+ * We are using generic for major work of the cpu but enforce to use preferencially cortex-a76 for their optimizations
+TARGET_CPU_VARIANT := generic: This setting tells the system to use general optimizations for any CPU type, without targeting Cortex-A78 specific features.
+TARGET_CPU_VARIANT_RUNTIME := cortex-a76: Here you are telling the system that even if it uses general optimizations, it should assume that it is running on a Cortex-A76 processor during OS execution.
+This is the closest you can get to taking advantage of A76 features on an A78, as AOSP does not have direct support for the A78.
+
+The current setting is the most recommended for your Cortex-A78 device, as it gives you a good balance between optimizations and compatibility.
+By using generic for the TARGET_CPU_VARIANT and cortex-a76 for the TARGET_CPU_VARIANT_RUNTIME, you are taking full advantage of your processor's capabilities without taking unnecessary risks.
+Since aosp does not support Cortex-a78 the closest is cortex-a76.
+
+* Using cortex-a55 for 2nd cpu clusters
+By specifying cortex-a55 for both TARGET_2ND_CPU_VARIANT and TARGET_2ND_CPU_VARIANT_RUNTIME, we are providing the system with accurate information about the hardware in the second cluster.
+This will allow the system to perform specific optimizations for these cores, thus improving performance and power efficiency.
+
+Reason No.2 :
+[amritokun]
+As mentioned in the above text AOSP has no direct support for the Cortex-A78 & SM6375 (SD695) has two big clusters locked at 2.21 GHz based on Cortex-A78
+As Per previous configuration by @dereference23 , He mentioned in 38dd683 commit
+both were set to Cortex-A55 even the big ones .
+This was hurting CPU performence & optimisation considerebly
+
+Also Reffer to -
+PaimonLab/kernel_xiaomi_veux@a930942
+
+- Update adm value to 12 to fix sound cracking
+- Optimize ram management
+- Also Read Kernel Changes - https://t.me/paimonlabind/292 
+
+# AXION 1.1 (13/03/'25):
+- Initial Official Update
